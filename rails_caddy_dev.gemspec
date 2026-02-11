@@ -14,10 +14,11 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = '>= 3.1.0'
 
   spec.metadata['rubygems_mfa_required'] = 'true'
+  spec.executables = ['rails_caddy_dev']
 
   spec.require_paths = ['lib']
   spec.files = Dir.chdir(File.expand_path(__dir__)) do
-    Dir['lib/**/*', 'MIT-LICENSE', 'README.md']
+    Dir['lib/**/*', 'bin/rails_caddy_dev', 'MIT-LICENSE', 'README.md']
   end
 
   spec.add_dependency 'rails', ['>= 7.1.0', '< 9.0']

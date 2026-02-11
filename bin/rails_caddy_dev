@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+if ARGV[0] == 'port'
+  require 'socket';
+  puts Addrinfo.tcp('', 0).bind { |s| s.local_address.ip_port }
+  exit 0
+else
+  puts "Usage: `rails_caddy_dev port` to get an available port number."
+  exit 1
+end
