@@ -53,34 +53,23 @@ This will configure Caddy to proxy `myapp.localhost` to your Rails server, acces
 |---|---|---|
 | `DEVCADDY` | Enables Caddy configuration (must be set) | — |
 | `PROJECT_NAME` | Used to derive the `.localhost` hostname (required) | — |
-| `PORT` | Rails server port to proxy to | `3000` |
+| `PORT` | Rails server port to proxy to | Auto-detected available port (falls back to `3000`) |
 | `CADDY_HOST` | Caddy admin API host | `localhost` |
 | `CADDY_PORT` | Caddy admin API port | `2019` |
 
 ### Dynamic Port Allocation
 
-The gem includes a standalone executable to find an available TCP port, which can be useful if you want to run multiple Rails servers without port conflicts:
+If `PORT` is not set, the gem automatically detects an available TCP port and uses it. This means you can run multiple Rails servers without port conflicts — no manual configuration needed.
+
+You can also use the standalone executable to find an available port yourself:
 
 ```bash
 export PORT=$(bundle exec rails_caddy_dev port)
 ```
 
-RailsCaddyDev will then configure Caddy to proxy to the dynamically allocated port, and start your Rails server on that port.
-
 ### Subdomains
 
 Subdomains are also supported due to a wildcard Caddy route that will be configured. For example, if you set `PROJECT_NAME=myapp`, then `api.myapp.localhost` will also proxy to your Rails server.
-
-### Usage with Mise
-
-If you're using [Mise](https://github.com/joelmoss/mise), you can integrate RailsCaddyDev by setting the `PORT` environment variable dynamically using the CLI command provided by RailsCaddyDev. Add this to your Mise config (eg. `mise.toml`):
-
-```toml
-[env]
-PORT = { value = "${env.PORT:-{{exec(command='bundle exec rails rails_caddy_dev:available_port')}}}", tools = true }
-```
-
-Now the `PORT` environment variable will be set to an available port each time you start your Mise environment, allowing you to run multiple Rails servers without port conflicts.
 
 ## Development
 

@@ -6,30 +6,17 @@
 # `<project_name>.localhost` to the locally running Rails server.
 #
 # This file is intended to be run as part of the `rails server` startup process, and will only
-# execute in the development environment, and when the `DEVCADDY` environment variable is set. It
-# should be required from the application's 'bin/rails' file., making it look something like this:
-#
-#   #!/usr/bin/env ruby
-#
-#   APP_PATH = File.expand_path("../config/application", __dir__)
-#   require_relative "../config/boot"
-#
-#   if ENV['RAILS_ENV'] == 'development' && ENV.key?('DEVCADDY') &&
-#      (ARGV.first == 's' || ARGV.first == 'server')
-#     require 'rails_caddy_dev/update_config'
-#   end
-#
-#   require "rails/commands"
-#
+# execute in the development environment, and when the `DEVCADDY` environment variable is set.#
 #
 # The script checks if a Caddy config for the project already exists by querying the admin API. If
 # it does, it sends a PATCH request to update it; if not, it attempts to append a new route to the
 # existing config or initialize a new config structure if necessary.
 #
-# The script expects the following environment variables:
+# The script accepts the following environment variables:
 #   - PROJECT_NAME: Used to derive subdomain hostnames (e.g. "my_project" → my_project.localhost).
 #     This is required to ensure unique routing for each project.
-#   - PORT: Rails server port (default: 3000)
+#   - PORT: Rails server port (defaults to an available port if not set, or 3000 if port detection
+#     fails)
 #   - CADDY_HOST: Caddy admin API host (default: localhost)
 #   - CADDY_PORT: Caddy admin API port (default: 2019)
 #
@@ -38,10 +25,14 @@
 
 require 'net/http'
 require 'json'
+require 'socket'
 
 return if ENV.fetch('RAILS_ENV', 'development') != 'development' || !ENV.key?('DEVCADDY')
 
-PORT = ENV.fetch('PORT', '3000')
+PORT = ENV['PORT'] = ENV.fetch('PORT') do
+  Addrinfo.tcp('', 0).bind { |s| s.local_address.ip_port }&.to_s || '3000'
+end
+
 CADDY_HOST = ENV.fetch('CADDY_HOST', 'localhost')
 CADDY_PORT = ENV.fetch('CADDY_PORT', '2019').to_i
 PROJECT_NAME = ENV.fetch('PROJECT_NAME')&.downcase
