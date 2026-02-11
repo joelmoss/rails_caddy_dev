@@ -48,9 +48,7 @@ PROJECT_NAME = ENV.fetch('PROJECT_NAME')&.downcase
 
 domains = [
   "#{PROJECT_NAME}.localhost",
-  "admin.#{PROJECT_NAME}.localhost",
-  "clients.#{PROJECT_NAME}.localhost",
-  "therapists.#{PROJECT_NAME}.localhost"
+  "*.#{PROJECT_NAME}.localhost"
 ]
 
 # Check if config already exists via Caddy API
