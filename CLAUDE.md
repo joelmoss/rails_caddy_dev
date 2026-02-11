@@ -9,8 +9,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 - **Setup:** `bin/setup`
-- **Tests:** `bundle exec rake test` (Minitest)
-- **Single test:** `bundle exec ruby -Ilib:test test/test_rails_caddy_dev.rb --name test_name`
 - **Lint:** `bundle exec rubocop`
 - **Lint with autofix:** `bundle exec rubocop -A`
 - **Default task (test + lint):** `bundle exec rake`
