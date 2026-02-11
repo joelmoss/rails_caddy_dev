@@ -32,7 +32,7 @@ require "rails/commands"
 with this:
 
 ```ruby
-require "rails_caddy_dev/commands"
+require ENV.key?('DEVCADDY') ? "rails_caddy_dev/commands" : "rails/commands"
 ```
 
 This will ensure your Caddy configuration is updated each time you start your Rails server in development.
