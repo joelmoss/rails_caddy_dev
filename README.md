@@ -59,10 +59,10 @@ This will configure Caddy to proxy `myapp.localhost` to your Rails server, acces
 
 ### Dynamic Port Allocation
 
-The gem also provides a CLI command to find an available TCP port, which can be useful if you want to run multiple Rails servers without port conflicts:
+The gem includes a standalone executable to find an available TCP port, which can be useful if you want to run multiple Rails servers without port conflicts:
 
 ```bash
-export PORT=$(bundle exec rails rails_caddy_dev:available_port)
+export PORT=$(bundle exec rails_caddy_dev port)
 ```
 
 RailsCaddyDev will then configure Caddy to proxy to the dynamically allocated port, and start your Rails server on that port.
